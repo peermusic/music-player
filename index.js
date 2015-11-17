@@ -12,10 +12,8 @@ function PlayerEngine (files, opts) {
   this.files = files
   // example of emitting an event with an object as payload (payload optional)
   // this.emit('eventName', { my: 'payload' })
-  this.on('progress', progressHandler)
-  this.on('change', changeHandler)
-  this.engine.addEventListener('timeupdate', () => this.emit('progress')) // event: this.engine.timeupdate
-  this.engine.addEventListener('ended', () => this.emit('changeHandler')) // event: this.engine.ended
+  this.engine.addEventListener('timeupdate', () => this.emit('progress')) // event: this.engine.timeupdate, TODO: add payload when necessary
+  this.engine.addEventListener('ended', () => this.emit('changeHandler')) // event: this.engine.ended TODO: add payload when necessary
 }
 
 // Set a random track as source
