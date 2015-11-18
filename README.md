@@ -27,6 +27,8 @@ wzrd index.js:bundle.js
 ## Usage
 
 ```js
+var engine = require('player-engine')
+
 // Triggers when the "playing" state changes
 engine.on('playingState', function (playing) {
     // "playing" is true/false
@@ -47,8 +49,9 @@ engine.on('progress', function (progress) {
     // "progress" is a float with the current time (in seconds)
 })
 
-// Call this when you added event listeners to all events
-engine.start()
+// Set the files for the engine. 
+// Call this when you are done with adding event listeners
+engine.setFiles()
 
 // Return the URL of the current track when the player is active else return "false"
 engine.playing()

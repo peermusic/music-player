@@ -3,57 +3,43 @@ var fs = require('file-system')(64 * 1024 * 1024)
 
 var seeking = false
 
-// Initialise the engine with files out of the file system
-fs.list(function (items) {
-  engine = engine(items)
+// Initialize the player engine & event listeners
+engine = engine()
 
-  // Setup the volume bar
-  engine.volume(0.2)
-  document.querySelector('#volumeBar').min = 0
-  document.querySelector('#volumeBar').max = 1
-  document.querySelector('#volumeBar').step = 0.01
-  document.querySelector('#volumeBar').value = 0.2
+// Setup the volume bar
+engine.volume(0.2)
+document.querySelector('#volumeBar').min = 0
+document.querySelector('#volumeBar').max = 1
+document.querySelector('#volumeBar').step = 0.01
+document.querySelector('#volumeBar').value = 0.2
 
-  // Toggle the playing state
-  engine.on('playingState', function (playing) {
-    document.querySelector('#play').innerHTML = playing ? '<i class="fa fa-pause"></i>' : '<i class="fa fa-play"></i>'
-  })
-
-  // Toggle the "back" state
-  engine.on('backState', function (back_possible) {
-    document.querySelector('#previous').disabled = !back_possible
-  })
-
-  // Update songs
-  engine.on('songState', function (song) {
-    document.querySelector('#fileContainer').innerHTML = '<strong>Currently playing:</strong> ' + song.name
-    document.querySelector('#currentTime').innerHTML = duration(0)
-    document.querySelector('#progressBar').min = 0
-    document.querySelector('#progressBar').value = 0
-    document.querySelector('#progressBar').max = song.duration
-    document.querySelector('#songLength').innerHTML = duration(song.duration)
-  })
-
-  // Update progress
-  engine.on('progress', function (progress) {
-    if (!seeking) {
-      document.querySelector('#currentTime').innerHTML = duration(progress)
-      document.querySelector('#progressBar').value = Math.floor(progress)
-    }
-  })
-
-  // Event listeners set up, let's start up!
-  engine.start()
+// Toggle the playing state
+engine.on('playingState', function (playing) {
+  document.querySelector('#play').innerHTML = playing ? '<i class="fa fa-pause"></i>' : '<i class="fa fa-play"></i>'
 })
 
-// Format a second value as minutes:seconds
-function duration (seconds) {
-  seconds = Math.floor(seconds)
-  var minutes = Math.floor(seconds / 60)
-  seconds = seconds - minutes * 60
-  seconds = seconds < 10 ? '0' + seconds : seconds
-  return minutes + ':' + seconds
-}
+// Toggle the "back" state
+engine.on('backState', function (back_possible) {
+  document.querySelector('#previous').disabled = !back_possible
+})
+
+// Update songs
+engine.on('songState', function (song) {
+  document.querySelector('#fileContainer').innerHTML = '<strong>Currently playing:</strong> ' + song.name
+  document.querySelector('#currentTime').innerHTML = duration(0)
+  document.querySelector('#progressBar').min = 0
+  document.querySelector('#progressBar').value = 0
+  document.querySelector('#progressBar').max = song.duration
+  document.querySelector('#songLength').innerHTML = duration(song.duration)
+})
+
+// Update progress
+engine.on('progress', function (progress) {
+  if (!seeking) {
+    document.querySelector('#currentTime').innerHTML = duration(progress)
+    document.querySelector('#progressBar').value = Math.floor(progress)
+  }
+})
 
 // Add files to the file system
 function addFiles (files) {
@@ -75,7 +61,19 @@ function showFiles () {
     var list = document.querySelector('#list')
     list.innerHTML = ''
     list.appendChild(fragment)
+
+    // Update the engine's files with the one's from the file system
+    engine.setFiles(files)
   })
+}
+
+// Format a second value as minutes:seconds
+function duration (seconds) {
+  seconds = Math.floor(seconds)
+  var minutes = Math.floor(seconds / 60)
+  seconds = seconds - minutes * 60
+  seconds = seconds < 10 ? '0' + seconds : seconds
+  return minutes + ':' + seconds
 }
 
 // Bind the window events
@@ -83,8 +81,13 @@ window.addEventListener('load', function () {
   showFiles()
 
   // Add files
-  document.querySelector('#myfile').onchange = function (e) {
+  document.querySelector('#myfile').onchange = function () {
     addFiles(this.files)
+  }
+
+  // Clear files
+  document.querySelector('#deleteFSContent').onclick = function () {
+    fs.clear(showFiles)
   }
 
   // Play/pause toggle

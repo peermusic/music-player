@@ -4,13 +4,13 @@ var inherits = require('inherits')
 module.exports = PlayerEngine
 inherits(PlayerEngine, EventEmitter)
 
-function PlayerEngine (files, opts) {
+function PlayerEngine () {
   if (!(this instanceof PlayerEngine)) {
-    return new PlayerEngine(files, opts)
+    return new PlayerEngine()
   }
 
   // Save the files into an internal handling
-  this.files = files
+  this.files = []
 
   // Handle the internal history
   this.maximum_history = 100
@@ -33,9 +33,16 @@ function PlayerEngine (files, opts) {
   })
 }
 
-// All outside event listeners are set up, we can setup things internally that throw events
-PlayerEngine.prototype.start = function () {
-  this.setNextTrack()
+// Overwrite the files with fresh one's
+PlayerEngine.prototype.setFiles = function (files) {
+  this.files = files
+  if (files.length === 0) {
+    this.stop()
+    this.current_track = false
+  }
+  if (files.length > 0 && this.current_track === false) {
+    this.setNextTrack()
+  }
 }
 
 // Set the next track to play
