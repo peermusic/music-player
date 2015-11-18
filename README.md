@@ -51,7 +51,7 @@ engine.on('progress', function (progress) {
 
 // Set the files for the engine. 
 // Call this when you are done with adding event listeners
-engine.setFiles()
+engine.setFiles(files)
 
 // Return the URL of the current track when the player is active else return "false"
 engine.playing()
