@@ -1,27 +1,29 @@
 {
-  "name": "music-player",
-  "version": "0.1.0",
-  "description": "A simple music player engine.",
-  "main": "index.js",
-  "scripts": {
-    "test": "standard"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/peermusic/music-player.git"
-  },
-  "keywords": [
-    "music",
-    "player",
-    "HTML5"
-  ],
-  "author": "https://github.com/peermusic/",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/peermusic/music-player/issues"
-  },
-  "homepage": "https://github.com/peermusic/music-player#readme",
-  "dependencies": {
-    "file-system": "git+https://github.com/peermusic/file-system.git"
-  }
+    "name": "player-engine",
+    "version": "0.2.0",
+    "description": "A simple music player engine.",
+    "main": "index.js",
+    "scripts": {
+        "test": "standard"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/peermusic/player-engine.git"
+    },
+    "keywords": [
+        "music",
+        "player",
+        "HTML5"
+    ],
+    "author": "https://github.com/peermusic/",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/peermusic/player-engine/issues"
+    },
+    "homepage": "https://github.com/peermusic/player-engine#readme",
+    "dependencies": {
+        "file-system": "git+https://github.com/peermusic/file-system.git",
+        "inherits": "~2.0",
+        "events": "~1.1"
+    }
 }
