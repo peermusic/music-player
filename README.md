@@ -32,6 +32,11 @@ engine.on('playingState', function (playing) {
     // "playing" is true/false
 })
 
+// Triggers when the possibility of going "back" changes
+engine.on('backState', function (back_possible) {
+    // "back_possible" is true/false
+})
+
 // Triggers when the song changes
 engine.on('songState', function (song) {
     // "song" is an object with "name" and "duration"
@@ -60,8 +65,11 @@ engine.stop()
 // Pauses the audio playback, can be resumed from the current state
 engine.pause()
 
+// Goes back to the last song
+engine.back()
+
 // Skips the current song
-engine.skip()
+engine.next()
 
 // Sets volume to the given volume, if volume is empty act as get function
 engine.volume(volume)

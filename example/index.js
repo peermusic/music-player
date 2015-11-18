@@ -19,6 +19,11 @@ fs.list(function (items) {
     document.querySelector('#play').innerHTML = playing ? '<i class="fa fa-pause"></i>' : '<i class="fa fa-play"></i>'
   })
 
+  // Toggle the "back" state
+  engine.on('backState', function (back_possible) {
+    document.querySelector('#previous').disabled = !back_possible
+  })
+
   // Update songs
   engine.on('songState', function (song) {
     document.querySelector('#fileContainer').innerHTML = '<strong>Currently playing:</strong> ' + song.name
@@ -87,9 +92,14 @@ window.addEventListener('load', function () {
     engine.toggle()
   }
 
+  // "Back" button
+  document.querySelector('#previous').onclick = function () {
+    engine.back()
+  }
+
   // "Skip" button
   document.querySelector('#next').onclick = function () {
-    engine.skip()
+    engine.next()
   }
 
   // Progress bar sliding updates the time

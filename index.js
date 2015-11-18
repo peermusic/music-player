@@ -12,6 +12,12 @@ function PlayerEngine (files, opts) {
   // Save the files into an internal handling
   this.files = files
 
+  // Handle the internal history
+  this.maximum_history = 100
+  this.current_track = false
+  this.history_pointer = false
+  this.history = []
+
   // Add an audio element as the actual "play" engine
   this.engine = document.createElement('audio')
 
@@ -23,7 +29,7 @@ function PlayerEngine (files, opts) {
   })
 
   this.engine.addEventListener('ended', function () {
-    self.skip()
+    self.next()
   })
 }
 
@@ -35,6 +41,29 @@ PlayerEngine.prototype.start = function () {
 // Set the next track to play
 PlayerEngine.prototype.setNextTrack = function () {
   var file = this.files[Math.floor(Math.random() * this.files.length)]
+  this.setEngineTrack(file)
+  this.addHistoryTrack()
+}
+
+PlayerEngine.prototype.addHistoryTrack = function () {
+  // Push the current track to history
+  if (this.current_track) {
+    this.history.push(this.current_track)
+    this.history_pointer = this.history_pointer === false ? 0 : this.history_pointer + 1
+  }
+
+  // Make sure we only save a maximum amount in history
+  this.history = this.history.slice(Math.max(this.history.length - this.maximum_history, 0))
+  this.history_pointer = this.history_pointer > this.maximum_history - 1 ? this.maximum_history - 1 : this.history_pointer
+
+  // Tell the outside world we can now go back
+  if (this.history_pointer > 0) {
+    this.emit('backState', true)
+  }
+}
+
+PlayerEngine.prototype.setEngineTrack = function (file) {
+  this.current_track = file
   this.engine.src = file.toURL()
 
   // Publish new track to the outside world
@@ -75,9 +104,37 @@ PlayerEngine.prototype.pause = function () {
   this.emit('playingState', false)
 }
 
+// Plays the last song
+PlayerEngine.prototype.back = function () {
+  // We are on the last time we can go back
+  if (this.history_pointer <= 1) {
+    this.emit('backState', false)
+  }
+
+  // Bad call
+  if (this.history_pointer === 0) {
+    console.error('Nothing in the history anymore')
+    return
+  }
+
+  // Play the last track in history
+  this.history_pointer--
+  this.setEngineTrack(this.history[this.history_pointer])
+  this.play()
+}
+
 // Skips the current song
-PlayerEngine.prototype.skip = function () {
-  this.setNextTrack()
+PlayerEngine.prototype.next = function () {
+  if (this.history_pointer === false || this.history_pointer === this.history.length - 1) {
+    // We have no track in the history anymore, new one!
+    this.setNextTrack()
+  } else {
+    // Grab the next track out of the history
+    this.history_pointer++
+    this.setEngineTrack(this.history[this.history_pointer])
+    this.emit('backState', true)
+  }
+
   this.play()
 }
 
