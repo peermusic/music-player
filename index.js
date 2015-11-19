@@ -101,6 +101,11 @@ PlayerEngine.prototype.setTrack = function (index) {
   this.play()
 }
 
+// Set the track from outside by index of the internal files
+PlayerEngine.prototype.removeTrack = function (index) {
+  this.files.splice(index, 1)
+}
+
 // Get the internal file list
 PlayerEngine.prototype.getTracks = function () {
   return this.files

@@ -66,7 +66,7 @@ function renderView () {
     var track = tracks[i]
     var li = document.createElement('li')
     var playing = current_song_index === i ? '<strong>PLAYING</strong> ' : ''
-    li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + i + '\')">' + track.name + '</a>'
+    li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + i + '\')">' + track.name + '</a>' + ' &mdash; <a href="#" onclick="removeTrack(\'' + i + '\')">delete</a>'
     fragment.appendChild(li)
   }
 
@@ -138,4 +138,10 @@ window.addEventListener('load', function () {
 // Bind interface events
 window.playTrack = function (index) {
   engine.setTrack(index)
+}
+
+// Delete a file from the filesystem
+window.removeTrack = function (index) {
+    engine.removeTrack(index)
+    renderView()
 }
