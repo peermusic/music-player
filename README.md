@@ -41,7 +41,7 @@ engine.on('backState', function (back_possible) {
 
 // Triggers when the song changes
 engine.on('songState', function (song) {
-    // "song" is an object with "name" and "duration"
+    // "song" is an object with "name", "duration" and "index" of the currently played song
 })
 
 // Triggers during playing the track
@@ -49,7 +49,7 @@ engine.on('progress', function (progress) {
     // "progress" is a float with the current time (in seconds)
 })
 
-// Set the files for the engine. 
+// Overwrite the internal files with files you want the engine to play
 // Call this when you are done with adding event listeners
 engine.setFiles(files)
 
@@ -58,6 +58,24 @@ engine.playing()
 
 // Toggles the state of the player to playing/pause corresponding to the current state
 engine.toggle()
+
+// Set the track to be instantly played by index of the internal files
+engine.setTrack(index)
+
+// Queue a track to play later by index of the internal files
+engine.queueTrack(index)
+
+// Remove a track from the queue
+engine.unqueueTrack(index)
+
+// Get all queued tracks
+engine.getQueuedTracks()
+
+// Remove a track from the internal file list
+engine.removeTrack(index)
+
+// Get the internal file list
+engine.getTracks()
 
 // Start the audio playback
 engine.play()
@@ -68,10 +86,10 @@ engine.stop()
 // Pauses the audio playback, can be resumed from the current state
 engine.pause()
 
-// Goes back to the last song
+// Plays the last song
 engine.back()
 
-// Skips the current song
+// Plays the next song (either in history, queue or random)
 engine.next()
 
 // Sets volume to the given volume, if volume is empty act as get function

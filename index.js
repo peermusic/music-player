@@ -12,10 +12,10 @@ function PlayerEngine () {
   // Save the files into an internal handling
   this.files = []
 
-  // Handle internal song queue
+  // Internal song queue
   this.queued_songs = []
 
-  // Handle the internal history
+  // Song history
   this.maximum_history = 100
   this.current_track = false
   this.history_pointer = false
@@ -36,7 +36,7 @@ function PlayerEngine () {
   })
 }
 
-// Overwrite the files with fresh one's
+// Overwrite the internal files
 PlayerEngine.prototype.setFiles = function (files) {
   this.files = files
   if (files.length === 0) {
@@ -62,6 +62,7 @@ PlayerEngine.prototype.setNextTrack = function () {
   this.addHistoryTrack()
 }
 
+// Push a track to the history and manage the history
 PlayerEngine.prototype.addHistoryTrack = function () {
   // Push the current track to history
   if (this.current_track) {
@@ -85,6 +86,7 @@ PlayerEngine.prototype.addHistoryTrack = function () {
   }
 }
 
+// Play a track with the engine
 PlayerEngine.prototype.setEngineTrack = function (file) {
   this.current_track = file
   this.engine.src = file.toURL()
@@ -123,7 +125,7 @@ PlayerEngine.prototype.queueTrack = function (index) {
   this.queued_songs.push(this.files[index])
 }
 
-// Queue a track to play later
+// Remove a track from the queue
 PlayerEngine.prototype.unqueueTrack = function (index) {
   this.queued_songs.splice(index, 1)
 }
@@ -137,7 +139,7 @@ PlayerEngine.prototype.getQueuedTracks = function () {
   })
 }
 
-// Set the track from outside by index of the internal files
+// Remove a track from the internal file list
 PlayerEngine.prototype.removeTrack = function (index) {
   this.files.splice(index, 1)
 }
@@ -188,7 +190,7 @@ PlayerEngine.prototype.back = function () {
   this.play()
 }
 
-// Skips the current song
+// Plays the next song (either in history, queue or random)
 PlayerEngine.prototype.next = function () {
   if (this.history_pointer === false || this.history_pointer === this.history.length - 1) {
     // We have no track in the history anymore, new one!

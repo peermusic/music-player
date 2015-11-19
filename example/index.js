@@ -118,7 +118,7 @@ window.addEventListener('load', function () {
 
   // Clear files
   document.querySelector('#deleteFSContent').onclick = function () {
-    fs.clear(attachFiles())
+    fs.clear(attachFiles)
   }
 
   // Play/pause toggle
