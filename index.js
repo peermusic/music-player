@@ -12,6 +12,9 @@ function PlayerEngine () {
   // Save the files into an internal handling
   this.files = []
 
+  // Handle internal song queue
+  this.queued_songs = []
+
   // Handle the internal history
   this.maximum_history = 100
   this.current_track = false
@@ -47,7 +50,14 @@ PlayerEngine.prototype.setFiles = function (files) {
 
 // Set the next track to play
 PlayerEngine.prototype.setNextTrack = function () {
-  var file = this.files[Math.floor(Math.random() * this.files.length)]
+  var file
+
+  if (this.queued_songs.length > 0) {
+    file = this.queued_songs.shift()
+  } else {
+    file = this.files[Math.floor(Math.random() * this.files.length)]
+  }
+
   this.setEngineTrack(file)
   this.addHistoryTrack()
 }
@@ -96,9 +106,29 @@ PlayerEngine.prototype.toggle = function () {
 
 // Set the track from outside by index of the internal files
 PlayerEngine.prototype.setTrack = function (index) {
+  this.queued_songs = []
   this.setEngineTrack(this.files[index])
   this.addHistoryTrack()
   this.play()
+}
+
+// Queue a track to play later
+PlayerEngine.prototype.queueTrack = function (index) {
+  this.queued_songs.push(this.files[index])
+}
+
+// Queue a track to play later
+PlayerEngine.prototype.unqueueTrack = function (index) {
+  this.queued_songs.splice(index, 1)
+}
+
+// Get all queued tracks
+PlayerEngine.prototype.getQueuedTracks = function () {
+  var self = this
+  return this.queued_songs.map(function (x) {
+    x.index = self.files.indexOf(x)
+    return x
+  })
 }
 
 // Set the track from outside by index of the internal files
@@ -108,7 +138,11 @@ PlayerEngine.prototype.removeTrack = function (index) {
 
 // Get the internal file list
 PlayerEngine.prototype.getTracks = function () {
-  return this.files
+  var self = this
+  return this.files.map(function (x) {
+    x.index = self.files.indexOf(x)
+    return x
+  })
 }
 
 // Start the audio playback

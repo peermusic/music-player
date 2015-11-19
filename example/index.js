@@ -59,6 +59,11 @@ function attachFiles () {
 
 // Read the files from the engine and write them into the view
 function renderView () {
+  renderTracks()
+  renderQueuedTracks()
+}
+
+function renderTracks () {
   var tracks = engine.getTracks()
   var fragment = document.createDocumentFragment()
 
@@ -66,11 +71,29 @@ function renderView () {
     var track = tracks[i]
     var li = document.createElement('li')
     var playing = current_song_index === i ? '<strong>PLAYING</strong> ' : ''
-    li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + i + '\')">' + track.name + '</a>' + ' &mdash; <a href="#" onclick="removeTrack(\'' + i + '\')">delete</a>'
+    li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + track.name + '</a>' +
+      ' &mdash; <a href="#" onclick="queueTrack(\'' + track.index + '\')">queue</a>' +
+      ' &mdash; <a href="#" onclick="removeTrack(\'' + track.index + '\')">delete</a>'
     fragment.appendChild(li)
   }
 
   var list = document.querySelector('#list')
+  list.innerHTML = ''
+  list.appendChild(fragment)
+}
+
+function renderQueuedTracks () {
+  var tracks = engine.getQueuedTracks()
+  var fragment = document.createDocumentFragment()
+
+  for (var i = 0; i !== tracks.length; i++) {
+    var track = tracks[i]
+    var li = document.createElement('li')
+    li.innerHTML = '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + track.name + '</a>'
+    fragment.appendChild(li)
+  }
+
+  var list = document.querySelector('#queued')
   list.innerHTML = ''
   list.appendChild(fragment)
 }
@@ -140,8 +163,14 @@ window.playTrack = function (index) {
   engine.setTrack(index)
 }
 
-// Delete a file from the filesystem
+// Delete a track
 window.removeTrack = function (index) {
-    engine.removeTrack(index)
-    renderView()
+  engine.removeTrack(index)
+  renderView()
+}
+
+// Queue a track
+window.queueTrack = function (index) {
+  engine.queueTrack(index)
+  renderView()
 }
