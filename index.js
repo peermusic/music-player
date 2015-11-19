@@ -65,6 +65,12 @@ PlayerEngine.prototype.setNextTrack = function () {
 PlayerEngine.prototype.addHistoryTrack = function () {
   // Push the current track to history
   if (this.current_track) {
+    // If we are in the history but force clicking a track,
+    // update the history accordingly (cut at that point)
+    if (this.history_pointer !== false) {
+      this.history = this.history.slice(0, this.history_pointer + 1)
+    }
+
     this.history.push(this.current_track)
     this.history_pointer = this.history_pointer === false ? 0 : this.history_pointer + 1
   }
