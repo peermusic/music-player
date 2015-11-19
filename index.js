@@ -78,7 +78,8 @@ PlayerEngine.prototype.setEngineTrack = function (file) {
   this.engine.addEventListener('loadedmetadata', function () {
     self.emit('songState', {
       name: file.name,
-      duration: self.engine.duration
+      duration: self.engine.duration,
+      index: self.files.indexOf(file)
     })
   })
 }
@@ -91,6 +92,18 @@ PlayerEngine.prototype.playing = function () {
 // Toggles the state of the player to playing/pause corresponding to the current state
 PlayerEngine.prototype.toggle = function () {
   this.engine.paused === true ? this.play() : this.pause()
+}
+
+// Set the track from outside by index of the internal files
+PlayerEngine.prototype.setTrack = function (index) {
+  this.setEngineTrack(this.files[index])
+  this.addHistoryTrack()
+  this.play()
+}
+
+// Get the internal file list
+PlayerEngine.prototype.getTracks = function () {
+  return this.files
 }
 
 // Start the audio playback

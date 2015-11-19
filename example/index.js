@@ -2,6 +2,7 @@ var engine = require('../index.js')
 var fs = require('file-system')(64 * 1024 * 1024)
 
 var seeking = false
+var current_song_index = -1
 
 // Initialize the player engine & event listeners
 engine = engine()
@@ -31,6 +32,8 @@ engine.on('songState', function (song) {
   document.querySelector('#progressBar').value = 0
   document.querySelector('#progressBar').max = song.duration
   document.querySelector('#songLength').innerHTML = duration(song.duration)
+  current_song_index = song.index
+  renderView()
 })
 
 // Update progress
@@ -43,28 +46,33 @@ engine.on('progress', function (progress) {
 
 // Add files to the file system
 function addFiles (files) {
-  fs.add(files, showFiles)
+  fs.add(files, attachFiles)
 }
 
-// Show all files of the filesystem
-function showFiles () {
+// Update the engine's files with the one's from the file system
+function attachFiles () {
   fs.list(function (files) {
-    var fragment = document.createDocumentFragment()
-
-    for (var i in files) {
-      var file = files[i]
-      var li = document.createElement('li')
-      li.innerHTML = file.name
-      fragment.appendChild(li)
-    }
-
-    var list = document.querySelector('#list')
-    list.innerHTML = ''
-    list.appendChild(fragment)
-
-    // Update the engine's files with the one's from the file system
     engine.setFiles(files)
+    renderView()
   })
+}
+
+// Read the files from the engine and write them into the view
+function renderView () {
+  var tracks = engine.getTracks()
+  var fragment = document.createDocumentFragment()
+
+  for (var i = 0; i !== tracks.length; i++) {
+    var track = tracks[i]
+    var li = document.createElement('li')
+    var playing = current_song_index === i ? '<strong>PLAYING</strong> ' : ''
+    li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + i + '\')">' + track.name + '</a>'
+    fragment.appendChild(li)
+  }
+
+  var list = document.querySelector('#list')
+  list.innerHTML = ''
+  list.appendChild(fragment)
 }
 
 // Format a second value as minutes:seconds
@@ -78,7 +86,7 @@ function duration (seconds) {
 
 // Bind the window events
 window.addEventListener('load', function () {
-  showFiles()
+  attachFiles()
 
   // Add files
   document.querySelector('#myfile').onchange = function () {
@@ -87,7 +95,7 @@ window.addEventListener('load', function () {
 
   // Clear files
   document.querySelector('#deleteFSContent').onclick = function () {
-    fs.clear(showFiles)
+    fs.clear(attachFiles())
   }
 
   // Play/pause toggle
@@ -126,3 +134,8 @@ window.addEventListener('load', function () {
     engine.volume(document.querySelector('#volumeBar').value)
   }
 })
+
+// Bind interface events
+window.playTrack = function (index) {
+  engine.setTrack(index)
+}

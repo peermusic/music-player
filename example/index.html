@@ -10,8 +10,6 @@
 
 <h1>player-engine example</h1>
 
-<input type="file" id="myfile" multiple/>
-
 <div id="outerContainer">
 
     <div id="fileContainer">
@@ -42,10 +40,10 @@
 
 </div>
 
-<div>
-    <h2>Files:</h2>
-    <ul id="list"></ul>
+<div id="fileList">
+    <input type="file" id="myfile" multiple/> &mdash;
     <input type="button" id="deleteFSContent" value="Clear files"/>
+    <ul id="list"></ul>
 </div>
 
 <script src="bundle.js"></script>
