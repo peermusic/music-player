@@ -72,8 +72,8 @@ function renderTracks () {
     var li = document.createElement('li')
     var playing = current_song_index === i ? '<strong>PLAYING</strong> ' : ''
     li.innerHTML = playing + '<a href="#" onclick="playTrack(\'' + track.index + '\')">' + track.name + '</a>' +
-      ' &mdash; <a href="#" onclick="queueTrack(\'' + track.index + '\')">queue</a>' +
-      ' &mdash; <a href="#" onclick="removeTrack(\'' + track.index + '\')">delete</a>'
+        ' &mdash; <a href="#" onclick="queueTrack(\'' + track.index + '\')">queue</a>' +
+        ' &mdash; <a href="#" onclick="removeTrack(\'' + track.index + '\')">delete</a>'
     fragment.appendChild(li)
   }
 
@@ -174,3 +174,41 @@ window.queueTrack = function (index) {
   engine.queueTrack(index)
   renderView()
 }
+
+// Handle drag & drop by adding the dropped files
+function windowDrop (event) {
+  // get window.event if e argument missing (in IE)
+  event = event || window.event
+
+  // stops the browser from redirecting off to the image.
+  if (event.preventDefault) {
+    event.preventDefault()
+  }
+
+  var files = event.dataTransfer.files
+
+  // Check if the item is a folder
+  if (files[0].type === '') {
+    console.error('Folder are not supported for drag \'n\' drop yet')
+    return
+  }
+
+  addFiles(files)
+}
+
+// Cancel this event
+function cancel (e) {
+  if (e.preventDefault) {
+    e.preventDefault()
+  }
+
+  return false
+}
+
+// Event listeners -------------------------------------------------------------
+
+window.addEventListener('dragover', cancel)
+window.addEventListener('dragenter', cancel)
+window.addEventListener('dragleave', cancel)
+window.addEventListener('dragdrop', windowDrop)
+window.addEventListener('drop', windowDrop)
