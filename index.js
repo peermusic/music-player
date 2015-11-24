@@ -140,8 +140,10 @@ PlayerEngine.prototype.getQueuedTracks = function () {
 }
 
 // Remove a track from the internal file list
-PlayerEngine.prototype.removeTrack = function (index) {
-  this.files.splice(index, 1)
+PlayerEngine.prototype.removeTrack = function (filename) {
+  this.files = this.files.filter(function (x) {
+    return x.name !== filename
+  })
 }
 
 // Get the internal file list
