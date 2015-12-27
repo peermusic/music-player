@@ -1,6 +1,6 @@
 # player-engine
 
-A simple wrapper around the HTML 5 audio element.
+A simple wrapper around the HTML5 audio element.
 
 ## Install
 
@@ -33,7 +33,8 @@ engine.playing()
 // Toggles the state of the player to playing/pause corresponding to the current state
 engine.toggle()
 
-// Sets volume to the given value, if no value is given give back the current volumne
+// Sets volume to the given value (0-1)
+// If no value is given gives back the current volume
 engine.volume(volume)
 
 // Sets the playback position
