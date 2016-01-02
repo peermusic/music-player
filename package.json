@@ -1,7 +1,7 @@
 {
     "name": "player-engine",
-    "version": "0.2.0",
-    "description": "A simple music player engine.",
+    "version": "0.2.1",
+    "description": "A simple wrapper around the HTML 5 audio element.",
     "main": "index.js",
     "scripts": {
         "test": "standard"
@@ -13,7 +13,8 @@
     "keywords": [
         "music",
         "player",
-        "HTML5"
+        "HTML5",
+        "wrapper"
     ],
     "author": "https://github.com/peermusic/",
     "license": "MIT",
@@ -22,7 +23,6 @@
     },
     "homepage": "https://github.com/peermusic/player-engine#readme",
     "dependencies": {
-        "file-system": "git+https://github.com/peermusic/file-system.git",
         "inherits": "~2.0",
         "events": "~1.1"
     }
