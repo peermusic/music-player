@@ -1,29 +1,32 @@
 {
-    "name": "player-engine",
-    "version": "0.2.1",
-    "description": "A simple wrapper around the HTML 5 audio element.",
-    "main": "index.js",
-    "scripts": {
-        "test": "standard"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/peermusic/player-engine.git"
-    },
-    "keywords": [
-        "music",
-        "player",
-        "HTML5",
-        "wrapper"
-    ],
-    "author": "https://github.com/peermusic/",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/peermusic/player-engine/issues"
-    },
-    "homepage": "https://github.com/peermusic/player-engine#readme",
-    "dependencies": {
-        "inherits": "~2.0",
-        "events": "~1.1"
-    }
+  "name": "player-engine",
+  "version": "0.2.1",
+  "description": "A simple wrapper around the HTML 5 audio element.",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peermusic/player-engine.git"
+  },
+  "keywords": [
+    "music",
+    "player",
+    "HTML5",
+    "wrapper"
+  ],
+  "author": "https://github.com/peermusic/",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/peermusic/player-engine/issues"
+  },
+  "homepage": "https://github.com/peermusic/player-engine#readme",
+  "dependencies": {
+    "inherits": "~2.0",
+    "events": "~1.1"
+  },
+  "devDependencies": {
+    "standard": "^5.4.1"
+  }
 }
